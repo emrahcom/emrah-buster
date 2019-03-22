@@ -29,18 +29,22 @@ apt $APT_PROXY_OPTION -y install iputils-ping fping wget curl whois dnsutils
 apt $APT_PROXY_OPTION -y install bzip2 rsync ack-grep jq
 apt $APT_PROXY_OPTION -y install net-tools rsyslog
 
-# added packages if I'm not in LXC container
-[ "$AM_I_IN_LXC" != true ] && apt $APT_PROXY_OPTION -y install openntpd
-
 # -----------------------------------------------------------------------------
 # SYSTEM CONFIGURATION
 # -----------------------------------------------------------------------------
 # changed/added system files
 cp ../../host/etc/cron.d/eb_update /etc/cron.d/
-cp ../../host/etc/default/openntpd /etc/default/
 
-# openntpd
-systemctl restart openntpd.service
+# -----------------------------------------------------------------------------
+# OPENNTPD
+# -----------------------------------------------------------------------------
+# install openntpd if I'm not in LXC container
+if [ "$AM_I_IN_LXC" != true ]
+then
+    apt $APT_PROXY_OPTION -y install openntpd
+    cp ../../host/etc/default/openntpd /etc/default/
+    systemctl restart openntpd.service
+fi
 
 # -----------------------------------------------------------------------------
 # ROOT USER
