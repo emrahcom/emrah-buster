@@ -25,6 +25,8 @@ echo HOST="$IP" >> \
 
 # remote IP address
 REMOTE_IP=$(ip addr show $PUBLIC_INTERFACE | ack "$PUBLIC_INTERFACE$" | \
+            xargs | cut -d " " -f 2 | cut -d "/" -f1)
+echo REMOTE_IP="$REMOTE_IP" >> \
     $BASEDIR/$GIT_LOCAL_DIR/installer_sub_scripts/$INSTALLER/000_source
 
 # -----------------------------------------------------------------------------
