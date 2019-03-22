@@ -24,6 +24,7 @@ echo "export VERSION=$VERSION" >> $SOURCE
 
 # Architecture
 ARCH=$(dpkg --print-architecture)
+echo "export ARCH=$ARCH" >> $SOURCE
 
 # RAM capacity
 RAM=$(free -m | grep Mem: | awk '{ print $2 }')
