@@ -27,8 +27,10 @@ apt $APT_PROXY_OPTION -y install zsh tmux vim
 apt $APT_PROXY_OPTION -y install htop iotop bmon bwm-ng
 apt $APT_PROXY_OPTION -y install iputils-ping fping wget curl whois dnsutils
 apt $APT_PROXY_OPTION -y install bzip2 rsync ack-grep jq
-apt $APT_PROXY_OPTION -y install openntpd net-tools
-apt $APT_PROXY_OPTION -y install rsyslog
+apt $APT_PROXY_OPTION -y install net-tools rsyslog
+
+# added packages if I'm not in LXC container
+[ $AM_I_IN_LXC != true ] && apt $APT_PROXY_OPTION -y install openntpd
 
 # -----------------------------------------------------------------------------
 # SYSTEM CONFIGURATION
