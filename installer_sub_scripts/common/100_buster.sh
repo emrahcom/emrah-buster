@@ -57,7 +57,8 @@ sleep 1
 set -e
 
 # create the new one
-lxc-create -n $MACH -t download -P /var/lib/lxc/ -- -d debian -r buster
+lxc-create -n $MACH -t download -P /var/lib/lxc/ -- \
+    -d debian -r buster -a $ARCH
 
 # container config
 rm -rf $ROOTFS/var/cache/apt/archives

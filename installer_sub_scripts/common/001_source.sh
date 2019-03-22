@@ -22,6 +22,9 @@ VERSION=$(git log --date=format:'%Y%m%d-%H%M' | egrep -i '^date:' | \
           head -n1 | awk '{print $2}')
 echo "export VERSION=$VERSION" >> $SOURCE
 
+# Architecture
+ARCH=$(dpkg --print-architecture)
+
 # RAM capacity
 RAM=$(free -m | grep Mem: | awk '{ print $2 }')
 echo "export RAM=$RAM" >> $SOURCE
