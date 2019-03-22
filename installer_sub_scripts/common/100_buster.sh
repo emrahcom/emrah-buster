@@ -63,18 +63,18 @@ lxc-create -n $MACH -t download -P /var/lib/lxc/ -- \
 # container config
 rm -rf $ROOTFS/var/cache/apt/archives
 mkdir -p $ROOTFS/var/cache/apt/archives
-sed -i '/lxc\.network\./d' /var/lib/lxc/$MACH/config
+sed -i '/lxc\.net\./d' /var/lib/lxc/$MACH/config
 cat >> /var/lib/lxc/$MACH/config <<EOF
 
-lxc.mount.entry = /var/cache/apt/archives \
+lxc.mount.entry = /usr/local/eb/cache/buster_apt_archives \
 $ROOTFS/var/cache/apt/archives none bind 0 0
 
-lxc.network.type = veth
-lxc.network.link = $BRIDGE
-lxc.network.name = eth0
-lxc.network.flags = up
-lxc.network.ipv4 = $IP/24
-lxc.network.ipv4.gateway = auto
+lxc.net.0.type = veth
+lxc.net.0.link = $BRIDGE
+lxc.net.0.name = eth0
+lxc.net.0.flags = up
+lxc.net.0.ipv4 = $IP/24
+lxc.net.0.ipv4.gateway = auto
 EOF
 
 # changed/added system files
