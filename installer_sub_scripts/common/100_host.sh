@@ -42,8 +42,8 @@ dpkg -l >> $OLD_FILES/dpkg.status
 # upgrade
 apt $APT_PROXY_OPTION -yd full-upgrade
 apt $APT_PROXY_OPTION -y upgrade
-apt $APT_PROXY_OPTION -y install apt-utils
+apt $APT_PROXY_OPTION -y install apt-utils procps
 
 # added packages
-apt $APT_PROXY_OPTION -y install lxc debootstrap bridge-utils
+apt $APT_PROXY_OPTION -y install lxc debootstrap bridge-utils apparmor
 apt $APT_PROXY_OPTION -y install dnsmasq
