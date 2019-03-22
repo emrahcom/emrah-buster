@@ -22,8 +22,11 @@ OLD_FILES="/root/eb_old_files/$DATE"
 mkdir -p $OLD_FILES
 
 # process status
-echo "# ----- ps auxfw -----" >> $OLD_FILES/ps.status
-ps auxfw >> $OLD_FILES/ps.status
+if [ -n "$(command -v modprobe)" ]
+then
+    echo "# ----- ps auxfw -----" >> $OLD_FILES/ps.status
+    ps auxfw >> $OLD_FILES/ps.status
+fi
 
 # deb status
 echo "# ----- dpkg -l -----" >> $OLD_FILES/dpkg.status
@@ -45,5 +48,5 @@ apt $APT_PROXY_OPTION -y upgrade
 apt $APT_PROXY_OPTION -y install apt-utils procps
 
 # added packages
-apt $APT_PROXY_OPTION -y install lxc debootstrap bridge-utils apparmor
+apt $APT_PROXY_OPTION -y install lxc debootstrap bridge-utils
 apt $APT_PROXY_OPTION -y install dnsmasq
