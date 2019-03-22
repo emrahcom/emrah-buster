@@ -30,7 +30,7 @@ apt $APT_PROXY_OPTION -y install bzip2 rsync ack-grep jq
 apt $APT_PROXY_OPTION -y install net-tools rsyslog
 
 # added packages if I'm not in LXC container
-[ $AM_I_IN_LXC != true ] && apt $APT_PROXY_OPTION -y install openntpd
+[ "$AM_I_IN_LXC" != true ] && apt $APT_PROXY_OPTION -y install openntpd
 
 # -----------------------------------------------------------------------------
 # SYSTEM CONFIGURATION
