@@ -22,11 +22,8 @@ OLD_FILES="/root/eb_old_files/$DATE"
 mkdir -p $OLD_FILES
 
 # process status
-if [ -n "$(command -v modprobe)" ]
-then
-    echo "# ----- ps auxfw -----" >> $OLD_FILES/ps.status
-    ps auxfw >> $OLD_FILES/ps.status
-fi
+echo "# ----- ps auxfw -----" >> $OLD_FILES/ps.status
+ps auxfw >> $OLD_FILES/ps.status
 
 # deb status
 echo "# ----- dpkg -l -----" >> $OLD_FILES/dpkg.status
@@ -45,7 +42,7 @@ dpkg -l >> $OLD_FILES/dpkg.status
 # upgrade
 apt $APT_PROXY_OPTION -yd full-upgrade
 apt $APT_PROXY_OPTION -y upgrade
-apt $APT_PROXY_OPTION -y install apt-utils procps
+apt $APT_PROXY_OPTION -y install apt-utils
 
 # added packages
 apt $APT_PROXY_OPTION -y install lxc debootstrap bridge-utils
