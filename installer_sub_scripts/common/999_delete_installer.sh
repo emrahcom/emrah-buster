@@ -4,6 +4,7 @@
 # DELETE_INSTALLER.SH
 # -----------------------------------------------------------------------------
 set -e
+source $BASEDIR/$GIT_LOCAL_DIR/installer_sub_scripts/$INSTALLER/000_source
 
 # -----------------------------------------------------------------------------
 # INIT
