@@ -63,12 +63,15 @@ lxc-create -n $MACH -t download -P /var/lib/lxc/ -- \
 # container config
 rm -rf $ROOTFS/var/cache/apt/archives
 mkdir -p $ROOTFS/var/cache/apt/archives
-sed -i '/lxc\.net\./d' /var/lib/lxc/$MACH/config
+sed -i '/^lxc\.net\./d' /var/lib/lxc/$MACH/config
+sed -i '/^# Network configuration/d' /var/lib/lxc/$MACH/config
+sed -i 's/^lxc.apparmor.profile.*$/lxc.apparmor.profile = unconfined/' \
+    /var/lib/lxc/$MACH/config
 cat >> /var/lib/lxc/$MACH/config <<EOF
-
 lxc.mount.entry = /usr/local/eb/cache/buster_apt_archives \
 $ROOTFS/var/cache/apt/archives none bind 0 0
 
+# Network configuration
 lxc.net.0.type = veth
 lxc.net.0.link = $BRIDGE
 lxc.net.0.name = eth0
