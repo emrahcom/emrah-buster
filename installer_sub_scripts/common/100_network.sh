@@ -145,8 +145,7 @@ nft add map ip eb-nat tcp2port \
     { type inet_service : inet_service \; }
 nft add rule ip eb-nat prerouting \
     iif $PUBLIC_INTERFACE dnat \
-    tcp dport map @tcp2ip : tcp dport map @tcp2port \
-    comment \"EB-MARK-TCP dont touch here\"
+    tcp dport map @tcp2ip:tcp dport map @tcp2port
 
 # dnat udp maps
 nft add map ip eb-nat udp2ip \
@@ -155,8 +154,7 @@ nft add map ip eb-nat udp2port \
     { type inet_service : inet_service \; }
 nft add rule ip eb-nat prerouting \
     iif $PUBLIC_INTERFACE dnat \
-    udp dport map @udp2ip : udp dport map @udp2port \
-    comment \"EB-MARK-UDP dont touch here\"
+    udp dport map @udp2ip:udp dport map @udp2port
 
 # -----------------------------------------------------------------------------
 # NETWORK RELATED SERVICES

@@ -24,7 +24,4 @@ EOF
 
 # save ruleset
 # 
-nft list ruleset -nn | \
-    sed 's/^\(.* dnat to\).*"\(EB-MARK-TCP dont touch here\)"/\1 tcp dport map @tcp2ip : tcp dport map @tcp2port comment "\2"/' | \
-    sed 's/^\(.* dnat to\).*"\(EB-MARK-UDP dont touch here\)"/\1 udp dport map @udp2ip : udp dport map @udp2port comment "\2"/' \
-    >> /etc/nftables.conf
+nft list ruleset -nn >> /etc/nftables.conf
