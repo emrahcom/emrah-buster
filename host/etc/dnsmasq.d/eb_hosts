@@ -1,3 +1,6 @@
 address=/host/172.22.22.1
 address=/reserved/172.22.22.22
+address=/eb-compiler/172.22.22.10
+address=/eb-livestream-origin/172.22.22.11
+address=/eb-livestream-edge/172.22.22.12
 address=/eb-buster/172.22.22.254
