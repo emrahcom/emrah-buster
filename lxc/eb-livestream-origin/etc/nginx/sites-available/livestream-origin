@@ -14,17 +14,6 @@ server {
 	deny all;
 
 # -----------------------------------------------------------------------------
-# MPEG-TS
-# -----------------------------------------------------------------------------
-	# mpeg-ts publish
-	location /livestream/publish {
-		ts;
-		ts_hls path=/usr/local/eb/livestream/hls/from_mpegts;
-		ts_dash path=/usr/local/eb/livestream/dash/from_mpegts;
-		client_max_body_size 0;
-	}
-
-# -----------------------------------------------------------------------------
 # RTMP STATUS
 # -----------------------------------------------------------------------------
 	# rtmp_stat view

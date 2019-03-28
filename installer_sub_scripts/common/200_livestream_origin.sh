@@ -61,8 +61,6 @@ cp -arp $BASEDIR/$GIT_LOCAL_DIR/host/usr/local/eb/livestream $SHARED/
 # container config
 rm -rf $ROOTFS/var/cache/apt/archives
 mkdir -p $ROOTFS/var/cache/apt/archives
-rm -rf $ROOTFS/usr/local/eb/deb
-mkdir -p $ROOTFS/usr/local/eb/deb
 rm -rf $ROOTFS/usr/local/eb/livestream
 mkdir -p $ROOTFS/usr/local/eb/livestream
 sed -i '/\/var\/cache\/apt\/archives/d' /var/lib/lxc/$MACH/config
@@ -72,7 +70,6 @@ sed -i '/^# Network configuration/d' /var/lib/lxc/$MACH/config
 cat >> /var/lib/lxc/$MACH/config <<EOF
 lxc.mount.entry = $SHARED/cache/buster_apt_archives \
 $ROOTFS/var/cache/apt/archives none bind 0 0
-lxc.mount.entry = $SHARED/deb $ROOTFS/usr/local/eb/deb none bind 0 0
 lxc.mount.entry = $SHARED/livestream \
 $ROOTFS/usr/local/eb/livestream none bind 0 0
 
@@ -121,16 +118,16 @@ lxc-attach -n $MACH -- \
     zsh -c \
     "export DEBIAN_FRONTEND=noninteractive
      apt $APT_PROXY_OPTION -y install ffmpeg
-     apt $APT_PROXY_OPTION -y install libgd3 libluajit-5.1-2 libxslt1.1 \
-         libhiredis0.13
-     dpkg -i /usr/local/eb/deb/eb-livestream-origin/nginx-common_*.deb
-     dpkg -i /usr/local/eb/deb/eb-livestream-origin/libnginx-mod-*.deb
-     dpkg -i /usr/local/eb/deb/eb-livestream-origin/nginx-extras_*.deb
-     dpkg -i /usr/local/eb/deb/eb-livestream-origin/nginx-doc_*.deb
-     apt-mark hold nginx-common nginx-extras nginx-doc
+     apt $APT_PROXY_OPTION -y install nginx libnginx-mod-rtmp
+     apt $APT_PROXY_OPTION -y install xz-utils
+
+     mkdir /tmp/source
+     cd /tmp/source
+     apt $APT_PROXY_OPTION -dy source nginx
+     tar xf nginx_*.debian.tar.xz
 
      mkdir -p /usr/local/eb/livestream/stat/
-     gunzip -c /usr/share/doc/nginx-doc/examples/rtmp_stat.xsl.gz > \
+     cp /tmp/source/debian/modules/rtmp/stat.xsl \
          /usr/local/eb/livestream/stat/rtmp_stat.xsl
      chown www-data: /usr/local/eb/livestream/stat -R"
 lxc-attach -n $MACH -- \
@@ -154,15 +151,20 @@ cp etc/uwsgi/apps-available/livestream_cloner.ini \
     $ROOTFS/etc/uwsgi/apps-available/
 ln -s ../apps-available/livestream_cloner.ini $ROOTFS/etc/uwsgi/apps-enabled/
 
-cp etc/nginx/nginx.conf $ROOTFS/etc/nginx/
 cp etc/nginx/access_list_http.conf $ROOTFS/etc/nginx/
 cp etc/nginx/access_list_rtmp.conf $ROOTFS/etc/nginx/
 cp etc/nginx/conf.d/custom.conf $ROOTFS/etc/nginx/conf.d/
-cp etc/nginx/sites-available/default $ROOTFS/etc/nginx/sites-available/
+cp etc/nginx/modules-available/90-eb-rtmp.conf \
+    $ROOTFS/etc/nginx/modules-available/
+ln -s ../modules-available/90-eb-rtmp.conf $ROOTFS/etc/nginx/modules-enabled/
+cp etc/nginx/sites-available/livestream-origin \
+    $ROOTFS/etc/nginx/sites-available/
+ln -s ../sites-available/livestream-origin $ROOTFS/etc/nginx/sites-enabled/
+rm $ROOTFS/etc/nginx/sites-enabled/default
 
 cp -arp root/eb_scripts/ $ROOTFS/root/
 chmod u+x $ROOTFS/root/eb_scripts/*.sh
-cp etc/cron.d/es_livestream_cleanup $ROOTFS/etc/cron.d/
+cp etc/cron.d/eb_livestream_cleanup $ROOTFS/etc/cron.d/
 
 # -----------------------------------------------------------------------------
 # CONTAINER SERVICES

@@ -1,1 +1,0 @@
-../common/200_compiler.sh
