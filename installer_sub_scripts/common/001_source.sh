@@ -31,5 +31,5 @@ RAM=$(free -m | grep Mem: | awk '{ print $2 }')
 echo "export RAM=$RAM" >> $SOURCE
 
 # Am I in LXC container?
-[ -n "$(env | grep 'container=lxc')" ] && \
+[ -n "$(env | grep 'container=lxc || true')" ] && \
     echo "export AM_I_IN_LXC=true" >> $SOURCE
