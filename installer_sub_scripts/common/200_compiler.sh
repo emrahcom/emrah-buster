@@ -19,8 +19,8 @@ echo COMPILER="$IP" >> \
 # NFTABLES RULES
 # -----------------------------------------------------------------------------
 # public ssh
-nft add element es-nat tcp2ip { $SSH_PORT : $IP }
-nft add element es-nat tcp2port { $SSH_PORT : 22 }
+nft add element eb-nat tcp2ip { $SSH_PORT : $IP }
+nft add element eb-nat tcp2port { $SSH_PORT : 22 }
 
 # -----------------------------------------------------------------------------
 # INIT
