@@ -101,6 +101,7 @@ cp etc/apt/sources.list.d/multimedia.list $ROOTFS/etc/apt/sources.list.d/
 lxc-attach -n $MACH -- \
     zsh -c \
     "apt $APT_PROXY_OPTION -oAcquire::AllowInsecureRepositories=true update
+     sync
      apt $APT_PROXY_OPTION --allow-unauthenticated -y install \
          deb-multimedia-keyring"
 # update
