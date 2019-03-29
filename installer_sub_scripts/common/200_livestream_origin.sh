@@ -169,6 +169,10 @@ cp etc/nginx/sites-available/livestream-origin \
     $ROOTFS/etc/nginx/sites-available/
 ln -s ../sites-available/livestream-origin $ROOTFS/etc/nginx/sites-enabled/
 rm $ROOTFS/etc/nginx/sites-enabled/default
+lxc-attach -n $MACH -- \
+    zsh -c \
+    "sed -i 's/^worker_processes .*$/worker_processes 1;/' \
+         /etc/nginx/nginx.conf"
 
 cp -arp root/eb_scripts/ $ROOTFS/root/
 chmod u+x $ROOTFS/root/eb_scripts/*.sh
