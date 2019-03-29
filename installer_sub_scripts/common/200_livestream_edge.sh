@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------
-# LIVESTREAM_ORIGIN.SH
+# LIVESTREAM_EDGE.SH
 # -----------------------------------------------------------------------------
 set -e
 source $BASEDIR/$GIT_LOCAL_DIR/installer_sub_scripts/$INSTALLER/000_source
@@ -7,12 +7,12 @@ source $BASEDIR/$GIT_LOCAL_DIR/installer_sub_scripts/$INSTALLER/000_source
 # -----------------------------------------------------------------------------
 # ENVIRONMENT
 # -----------------------------------------------------------------------------
-MACH="eb-livestream-origin"
+MACH="eb-livestream-edge"
 ROOTFS="/var/lib/lxc/$MACH/rootfs"
 DNS_RECORD=$(grep "address=/$MACH/" /etc/dnsmasq.d/eb_hosts | head -n1)
 IP=${DNS_RECORD##*/}
 SSH_PORT="30$(printf %03d ${IP##*.})"
-echo LIVESTREAM_ORIGIN="$IP" >> \
+echo LIVESTREAM_EDGE="$IP" >> \
     $BASEDIR/$GIT_LOCAL_DIR/installer_sub_scripts/$INSTALLER/000_source
 
 # -----------------------------------------------------------------------------
@@ -21,17 +21,14 @@ echo LIVESTREAM_ORIGIN="$IP" >> \
 # public ssh
 nft add element eb-nat tcp2ip { $SSH_PORT : $IP }
 nft add element eb-nat tcp2port { $SSH_PORT : 22 }
-# rtmp push
-nft add element eb-nat tcp2ip { 1935 : $IP }
-nft add element eb-nat tcp2port { 1935 : 1935 }
-# admin web
-nft add element eb-nat tcp2ip { 8000 : $IP }
-nft add element eb-nat tcp2port { 8000 : 80 }
+# http
+nft add element eb-nat tcp2ip { 80 : $IP }
+nft add element eb-nat tcp2port { 80 : 80 }
 
 # -----------------------------------------------------------------------------
 # INIT
 # -----------------------------------------------------------------------------
-[ "$DONT_RUN_LIVESTREAM_ORIGIN" = true ] && exit
+[ "$DONT_RUN_LIVESTREAM_EDGE" = true ] && exit
 cd $BASEDIR/$GIT_LOCAL_DIR/lxc/$MACH
 
 echo
@@ -83,7 +80,7 @@ lxc.net.0.ipv4.gateway = auto
 
 # Start options
 lxc.start.auto = 1
-lxc.start.order = 600
+lxc.start.order = 500
 lxc.start.delay = 2
 lxc.group = eb-group
 lxc.group = onboot
@@ -96,13 +93,6 @@ lxc-wait -n $MACH -s RUNNING
 # -----------------------------------------------------------------------------
 # PACKAGES
 # -----------------------------------------------------------------------------
-# multimedia repo
-cp etc/apt/sources.list.d/multimedia.list $ROOTFS/etc/apt/sources.list.d/
-lxc-attach -n $MACH -- \
-    zsh -c \
-    "apt $APT_PROXY_OPTION -oAcquire::AllowInsecureRepositories=true update
-     apt $APT_PROXY_OPTION --allow-unauthenticated -y install \
-         deb-multimedia-keyring"
 # update
 lxc-attach -n $MACH -- \
     zsh -c \
@@ -113,63 +103,31 @@ lxc-attach -n $MACH -- \
 lxc-attach -n $MACH -- \
     zsh -c \
     "export DEBIAN_FRONTEND=noninteractive
-     apt $APT_PROXY_OPTION -y install xmlstarlet libxml2-utils"
-lxc-attach -n $MACH -- \
-    zsh -c \
-    "export DEBIAN_FRONTEND=noninteractive
-     apt $APT_PROXY_OPTION -y install ffmpeg
-     apt $APT_PROXY_OPTION -y install nginx libnginx-mod-rtmp
-     apt $APT_PROXY_OPTION -y install xz-utils
-
-     mkdir /tmp/source
-     cd /tmp/source
-     apt $APT_PROXY_OPTION -dy source nginx
-     tar xf nginx_*.debian.tar.xz
-
-     mkdir -p /usr/local/eb/livestream/stat/
-     cp /tmp/source/debian/modules/rtmp/stat.xsl \
-         /usr/local/eb/livestream/stat/rtmp_stat.xsl
-     chown www-data: /usr/local/eb/livestream/stat -R"
-lxc-attach -n $MACH -- \
-    zsh -c \
-    "export DEBIAN_FRONTEND=noninteractive
-     apt $APT_PROXY_OPTION -y install uwsgi uwsgi-plugin-python3
-     apt $APT_PROXY_OPTION --install-recommends -y install python3-pip
-     pip3 install --upgrade setuptools
-     pip3 install mydaemon
-     pip3 install flask"
+     apt install -y nginx-extras php-fpm"
 
 # -----------------------------------------------------------------------------
 # SYSTEM CONFIGURATION
 # -----------------------------------------------------------------------------
-rm -rf $ROOTFS/var/www/livestream_cloner
-mkdir -p $ROOTFS/var/www/livestream_cloner
-rsync -aChu var/www/livestream_cloner/ $ROOTFS/var/www/livestream_cloner/
-chown www-data:www-data $ROOTFS/var/www/livestream_cloner -R
-
-cp etc/uwsgi/apps-available/livestream_cloner.ini \
-    $ROOTFS/etc/uwsgi/apps-available/
-ln -s ../apps-available/livestream_cloner.ini $ROOTFS/etc/uwsgi/apps-enabled/
-
-cp etc/nginx/access_list_http.conf $ROOTFS/etc/nginx/
-cp etc/nginx/access_list_rtmp.conf $ROOTFS/etc/nginx/
 cp etc/nginx/conf.d/custom.conf $ROOTFS/etc/nginx/conf.d/
-cp etc/nginx/modules-available/90-eb-rtmp.conf \
-    $ROOTFS/etc/nginx/modules-available/
-ln -s ../modules-available/90-eb-rtmp.conf $ROOTFS/etc/nginx/modules-enabled/
-cp etc/nginx/sites-available/livestream-origin \
+cp etc/nginx/sites-available/default $ROOTFS/etc/nginx/sites-available/
+cp etc/nginx/sites-available/livestream-edge \
     $ROOTFS/etc/nginx/sites-available/
-ln -s ../sites-available/livestream-origin $ROOTFS/etc/nginx/sites-enabled/
+ln -s ../sites-available/livestream-edge $ROOTFS/etc/nginx/sites-enabled/
 rm $ROOTFS/etc/nginx/sites-enabled/default
 
-cp -arp root/eb_scripts/ $ROOTFS/root/
-chmod u+x $ROOTFS/root/eb_scripts/*.sh
-cp etc/cron.d/eb_livestream_cleanup $ROOTFS/etc/cron.d/
+# -----------------------------------------------------------------------------
+# VIDEO PLAYERS
+# -----------------------------------------------------------------------------
+cp -arp usr/local/eb/livestream/hlsplayer $SHARED/livestream/
+cp -arp usr/local/eb/livestream/dashplayer $SHARED/livestream/
+lxc-attach -n $MACH -- \
+    zsh -c \
+    "chown www-data: /usr/local/eb/livestream/hlsplayer -R
+     chown www-data: /usr/local/eb/livestream/dashplayer -R"
 
 # -----------------------------------------------------------------------------
 # CONTAINER SERVICES
 # -----------------------------------------------------------------------------
-lxc-attach -n $MACH -- systemctl restart uwsgi
 lxc-attach -n $MACH -- systemctl reload nginx
 
 lxc-stop -n $MACH
