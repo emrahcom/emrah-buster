@@ -13,6 +13,11 @@ Table of contents
 - [Available templates](#available-templates)
     - [eb-base](#eb-base)
         - [To install eb-base](#to-install-eb-base)
+    - [eb-livestream](#eb-livestream)
+        - [Main components of eb-livestream](#main-components-of-eb-livestream)
+        - [To install eb-livestream](#to-install-eb-livestream)
+        - [After install eb-livestream](#after-install-eb-livestream)
+        - [Related links to eb-livestream](#related-links-to-eb-livestream)
 - [Requirements](#requirements)
 
 ---
@@ -55,6 +60,65 @@ wget https://raw.githubusercontent.com/emrahcom/emrah-buster/master/installer/eb
 wget https://raw.githubusercontent.com/emrahcom/emrah-buster/master/installer/eb-base.conf
 bash eb eb-base
 ```
+
+---
+
+eb-livestream
+-------------
+
+Install a ready-to-use live streaming media system.
+
+### Main components of eb-livestream
+
+-  Nginx server with nginx-rtmp-module as a stream origin.
+   It gets the RTMP stream and convert it to HLS and DASH.
+
+-  Nginx server with standart modules as a stream edge.
+   It publish the HLS and DASH stream.
+
+-  Web based HLS video player.
+
+-  Web based DASH video player.
+
+### To install eb-livestream
+
+```bash
+wget https://raw.githubusercontent.com/emrahcom/emrah-buster/master/installer/eb
+wget https://raw.githubusercontent.com/emrahcom/emrah-buster/master/installer/eb-livestream.conf
+bash eb eb-livestream
+```
+
+### After install eb-livestream
+
+-  `rtmp://<IP_ADDRESS>/livestream/<CHANNEL_NAME>` to push
+    an RTMP stream.
+
+-  `http://<IP_ADDRESS>/livestream/hls/<CHANNEL_NAME>/index.m3u8` to pull
+   the HLS stream.
+
+-  `http://<IP_ADDRESS>/livestream/dash/<CHANNEL_NAME>/index.mpd` to pull
+   the DASH stream.
+
+-  `http://<IP_ADDRESS>/livestream/hlsplayer/<CHANNEL_NAME>` for
+   the HLS video player page.
+
+-  `http://<IP_ADDRESS>/livestream/dashplayer/<CHANNEL_NAME>` for
+   the DASH video player page.
+
+-  `http://<IP_ADDRESS>:8000/livestream/status` for the RTMP status page.
+
+-  `http://<IP_ADDRESS>:8000/livestream/cloner` for the stream cloner page.
+   Thanks to [nejdetckenobi](https://github.com/nejdetckenobi)
+
+### Related links to eb-livestream
+
+-  [nginx-rtmp-module](https://github.com/arut/nginx-rtmp-module)
+
+-  [video.js](https://github.com/videojs/video.js)
+
+-  [videojs-contrib-hls](https://github.com/videojs/videojs-contrib-hls)
+
+-  [dash.js](https://github.com/Dash-Industry-Forum/dash.js/)
 
 ---
 
