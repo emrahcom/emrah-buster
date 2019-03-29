@@ -6,7 +6,7 @@ server {
 	listen [::]:80 default_server;
 
 	server_name _;
-	root /usr/local/es/livestream;
+	root /usr/local/eb;
 	index index.html index.htm;
 
 # -----------------------------------------------------------------------------
@@ -20,8 +20,6 @@ server {
 
 	# hls player
 	location = /livestream/hlsplayer/index.php {
-		alias /usr/local/eb/livestream/hlsplayer/index.php;
-
 		include snippets/fastcgi-php.conf;
 		fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
 
@@ -30,14 +28,11 @@ server {
 
 	# hls player static files
 	location /livestream/hlsplayer {
-		alias /usr/local/eb/livestream/hlsplayer;
 		add_header X-Node "hls_player_static";
 	}
 
 	# hls files
 	location ~ /livestream/hls/ {
-		alias /usr/local/es/livestream/hls/;
-
 		types {
 			application/x-mpegURL m3u8;
 			video/MP2T ts;
@@ -59,8 +54,6 @@ server {
 
 	# dash player
 	location = /livestream/dashplayer/index.php {
-		alias /usr/local/eb/livestream/dashplayer/index.php;
-
 		include snippets/fastcgi-php.conf;
 		fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
 
@@ -69,14 +62,11 @@ server {
 
 	# dash player static files
 	location /livestream/dashplayer {
-		alias /usr/local/eb/livestream/dashplayer;
 		add_header X-Node "dash_player_static";
 	}
 
 	# dash files
 	location ~ /livestream/dash/ {
-		alias /usr/local/eb/livestream/dash/;
-
 		types {
 			application/dash+xml mpd;
 			video/mp4 mp4;

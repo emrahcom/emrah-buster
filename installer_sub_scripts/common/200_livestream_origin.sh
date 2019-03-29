@@ -143,10 +143,17 @@ lxc-attach -n $MACH -- \
 # -----------------------------------------------------------------------------
 # SYSTEM CONFIGURATION
 # -----------------------------------------------------------------------------
+lxc-attach -n $MACH -- \
+    zsh -c \
+    "chown www-data:www-data /usr/local/eb/livestream/hls
+     chown www-data:www-data /usr/local/eb/livestream/dash"
+
 rm -rf $ROOTFS/var/www/livestream_cloner
 mkdir -p $ROOTFS/var/www/livestream_cloner
 rsync -aChu var/www/livestream_cloner/ $ROOTFS/var/www/livestream_cloner/
-chown www-data:www-data $ROOTFS/var/www/livestream_cloner -R
+lxc-attach -n $MACH -- \
+    zsh -c \
+    "chown www-data:www-data /var/www/livestream_cloner -R"
 
 cp etc/uwsgi/apps-available/livestream_cloner.ini \
     $ROOTFS/etc/uwsgi/apps-available/
