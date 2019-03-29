@@ -109,7 +109,6 @@ lxc-attach -n $MACH -- \
 # SYSTEM CONFIGURATION
 # -----------------------------------------------------------------------------
 cp etc/nginx/conf.d/custom.conf $ROOTFS/etc/nginx/conf.d/
-cp etc/nginx/sites-available/default $ROOTFS/etc/nginx/sites-available/
 cp etc/nginx/sites-available/livestream-edge \
     $ROOTFS/etc/nginx/sites-available/
 ln -s ../sites-available/livestream-edge $ROOTFS/etc/nginx/sites-enabled/
