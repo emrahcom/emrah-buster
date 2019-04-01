@@ -50,11 +50,11 @@ sleep 1
 set -e
 
 # create the new one
-lxc-copy -n eb-buster -N $MACH -p /var/lib/lxc/
+lxc-copy -n eb-stretch -N $MACH -p /var/lib/lxc/
 
 # shared directories
 mkdir -p $SHARED/cache
-cp -arp $BASEDIR/$GIT_LOCAL_DIR/host/usr/local/eb/cache/buster_apt_archives \
+cp -arp $BASEDIR/$GIT_LOCAL_DIR/host/usr/local/eb/cache/stretch_apt_archives \
     $SHARED/cache/
 
 # container config
@@ -65,7 +65,7 @@ sed -i '/^lxc\.net\./d' /var/lib/lxc/$MACH/config
 sed -i '/^# Network configuration/d' /var/lib/lxc/$MACH/config
 
 cat >> /var/lib/lxc/$MACH/config <<EOF
-lxc.mount.entry = $SHARED/cache/buster_apt_archives \
+lxc.mount.entry = $SHARED/cache/stretch_apt_archives \
 $ROOTFS/var/cache/apt/archives none bind 0 0
 
 # Network configuration
