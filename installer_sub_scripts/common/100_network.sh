@@ -48,7 +48,6 @@ mkdir -p $OLD_FILES
 [ -f /etc/nftables.conf ] && cp /etc/nftables.conf $OLD_FILES/
 [ -f /etc/network/interfaces ] && cp /etc/network/interfaces $OLD_FILES/
 [ -f /etc/resolv.conf ] && cp /etc/resolv.conf $OLD_FILES/
-[ -f /etc/issue ] && cp /etc/issue $OLD_FILES/
 [ -f /etc/dnsmasq.d/eb_hosts ] && \
     cp /etc/dnsmasq.d/eb_hosts $OLD_FILES/
 

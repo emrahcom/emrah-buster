@@ -34,5 +34,8 @@ echo "export RAM=$RAM" >> $SOURCE
 [ -n "$(env | grep 'container=lxc')" ] && \
     echo "export AM_I_IN_LXC=true" >> $SOURCE
 
+[ -z "$TIMEZONE" ] && \
+    echo "export TIMEZONE=$(cat /etc/timezone)" >> $SOURCE
+
 # always return true
 true

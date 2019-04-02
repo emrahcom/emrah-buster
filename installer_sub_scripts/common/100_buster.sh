@@ -116,6 +116,16 @@ lxc-attach -n $MACH -- \
      apt $APT_PROXY_OPTION -y install wget ca-certificates"
 
 # -----------------------------------------------------------------------------
+# SYSTEM CONFIGURATION
+# -----------------------------------------------------------------------------
+# tzdata
+lxc-attach -n $MACH -- \
+    zsh -c \
+    "echo $TIMEZONE > /etc/timezone
+     rm -f /etc/localtime
+     ln -s /usr/share/zoneinfo/$TIMEZONE /etc/localtime"
+
+# -----------------------------------------------------------------------------
 # ROOT USER
 # -----------------------------------------------------------------------------
 # ssh
