@@ -47,3 +47,4 @@ apt $APT_PROXY_OPTION -y install apt-utils
 # added packages
 apt $APT_PROXY_OPTION -y install lxc debootstrap bridge-utils
 apt $APT_PROXY_OPTION -y install dnsmasq
+apt $APT_PROXY_OPTION -y install xz-utils gnupg
