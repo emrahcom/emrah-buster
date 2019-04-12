@@ -90,7 +90,7 @@ EOF
 echo nameserver $HOST > $ROOTFS/etc/resolv.conf
 cp etc/network/interfaces $ROOTFS/etc/network/
 cp etc/apt/sources.list $ROOTFS/etc/apt/
-cp etc/apt/apt.conf.d/80recommends $ROOTFS/etc/apt/apt.conf.d/
+cp etc/apt/apt.conf.d/80disable-recommends $ROOTFS/etc/apt/apt.conf.d/
 
 # start container
 lxc-start -n $MACH -d

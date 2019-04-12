@@ -22,7 +22,7 @@ export TMOUT=1800
 apt-get() {
 	if [[ $1 == "clean" ]]
 	then
-                echo "Please, don't use 'apt-get clean' command"
+		echo "Please, don't use 'apt-get clean' command"
 		echo "because LXC containers share the same archive directory"
 	else
 		command apt-get $@
@@ -32,7 +32,7 @@ apt-get() {
 apt() {
 	if [[ $1 == "clean" ]]
 	then
-                echo "Please, don't use 'apt clean' command"
+		echo "Please, don't use 'apt clean' command"
 		echo "because LXC containers share the same archive directory"
 	else
 		command apt $@
