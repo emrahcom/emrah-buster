@@ -103,7 +103,6 @@ sleep 3
 # update
 lxc-attach -n $MACH -- apt $APT_PROXY_OPTION update
 lxc-attach -n $MACH -- apt $APT_PROXY_OPTION -y full-upgrade
-lxc-attach -n $MACH -- apt $APT_PROXY_OPTION -y install apt-utils
 
 # packages
 lxc-attach -n $MACH -- apt $APT_PROXY_OPTION -y install zsh
