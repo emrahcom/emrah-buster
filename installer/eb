@@ -6,10 +6,10 @@
 # The first argument is the template name and we need it.
 if [ -z "$1" ]
 then
-	echo "ERROR: missing argument. The template name is required"
-	echo "Usage:"
-	echo "         bash eb <TEMPLATE_NAME>"
-	exit 1
+    echo "ERROR: missing argument. The template name is required"
+    echo "Usage:"
+    echo "         bash eb <TEMPLATE_NAME>"
+    exit 1
 fi
 
 export INSTALLER="$(echo $1 | cut -d. -f1)"
@@ -27,15 +27,15 @@ export SHARED="/usr/local/eb"
 # -----------------------------------------------------------------------------
 # STATUS
 # -----------------------------------------------------------------------------
-export START_TIME=`date +%s`
-export DATE=`date +"%Y%m%d%H%M%S"`
-export BASEDIR=`pwd`
+export START_TIME=$(date +%s)
+export DATE=$(date +"%Y%m%d%H%M%S")
+export BASEDIR=$(pwd)
 export SWAP=$(grep SwapTotal /proc/meminfo | awk '{ print $2; }')
-export FREE_SPACE=`(df | grep "/var/lib/lxc$"
-        df | grep "/var/lib$"
-        df | grep "/var$"
-        df | egrep "/$") | \
-        head -n1 | awk '{ print $4; }'`
+export FREE_SPACE=$((df | grep "/var/lib/lxc$"
+    df | grep "/var/lib$"
+    df | grep "/var$"
+    df | egrep "/$") | \
+    head -n1 | awk '{ print $4; }')
 
 # -----------------------------------------------------------------------------
 # CUSTOMIZATION
@@ -55,33 +55,33 @@ export FREE_SPACE=`(df | grep "/var/lib/lxc$"
 # CHECKING THE HOST (which will host the LXC containers)
 # -----------------------------------------------------------------------------
 # If the current user is not 'root', cancel the installation.
-if [ "root" != "`whoami`" ]
+if [ "root" != "$(whoami)" ]
 then
-	echo
-	echo "ERROR: unauthorized user"
-	echo "Please, run the installation script as 'root'"
-	exit 1
+    echo
+    echo "ERROR: unauthorized user"
+    echo "Please, run the installation script as 'root'"
+    exit 1
 fi
 
 # If the OS release is unsupported, cancel the installation.
 if [ "$DONT_CHECK_OS_RELEASE" != true \
      -a -z "$(grep "$RELEASE" /etc/os-release)" ]
 then
-	echo
-	echo "ERROR: unsupported OS release"
-	echo "Please, use '$RELEASE' on host machine"
-	exit 1
+    echo
+    echo "ERROR: unsupported OS release"
+    echo "Please, use '$RELEASE' on host machine"
+    exit 1
 fi
 
 # If there is not enough disk free space, cancel the installation.
 if [ "$DONT_CHECK_FREE_SPACE" != true \
      -a "$FREE_SPACE" -lt "$FREE_SPACE_NEEDED" ]
 then
-	echo
-	echo "ERROR: there is not enough disk free space"
-	echo
-	df -h
-	exit 1
+    echo
+    echo "ERROR: there is not enough disk free space"
+    echo
+    df -h
+    exit 1
 fi
 
 set -e
@@ -91,11 +91,11 @@ set -e
 # -----------------------------------------------------------------------------
 if [ "$DONT_CLONE_GIT_REPO" != true ]
 then
-	apt $APT_PROXY_OPTION update
-	apt $APT_PROXY_OPTION -y install git
+    apt $APT_PROXY_OPTION update
+    apt $APT_PROXY_OPTION -y install git
 
-	rm -rf $GIT_LOCAL_DIR
-	git clone --depth=1 -b $GIT_BRANCH $GIT_REPO $GIT_LOCAL_DIR
+    rm -rf $GIT_LOCAL_DIR
+    git clone --depth=1 -b $GIT_BRANCH $GIT_REPO $GIT_LOCAL_DIR
 fi
 
 # -----------------------------------------------------------------------------
@@ -103,15 +103,15 @@ fi
 # -----------------------------------------------------------------------------
 cd $BASEDIR/$GIT_LOCAL_DIR/installer_sub_scripts/$INSTALLER
 
-for sub in `ls *.sh`
+for sub in $(ls *.sh)
 do
-	bash $sub
+    bash $sub
 done
 
 # -----------------------------------------------------------------------------
 # INSTALLATION DURATION
 # -----------------------------------------------------------------------------
-END_TIME=`date +%s`
-DURATION=`date -u -d "0 $END_TIME seconds - $START_TIME seconds" +"%H:%M:%S"`
+END_TIME=$(date +%s)
+DURATION=$(date -u -d "0 $END_TIME seconds - $START_TIME seconds" +"%H:%M:%S")
 
 echo Installation Duration: $DURATION

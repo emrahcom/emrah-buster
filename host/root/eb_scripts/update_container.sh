@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for mach in `lxc-ls -f | egrep 'RUNNING.*eb-group' | cut -d ' ' -f1`
+for mach in $(lxc-ls -f | egrep 'RUNNING.*eb-group' | cut -d ' ' -f1)
 do
 	echo
 	echo "<<<" $mach ">>>"
