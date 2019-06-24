@@ -109,31 +109,31 @@ lxc-attach -n $MACH -- \
 cp etc/apt/sources.list.d/multimedia.list $ROOTFS/etc/apt/sources.list.d/
 lxc-attach -n $MACH -- \
     zsh -c \
-    "apt $APT_PROXY_OPTION -oAcquire::AllowInsecureRepositories=true update
+    "apt-get $APT_PROXY_OPTION -oAcquire::AllowInsecureRepositories=true update
      sync
-     apt $APT_PROXY_OPTION --allow-unauthenticated -y install \
+     apt-get $APT_PROXY_OPTION --allow-unauthenticated -y install \
          deb-multimedia-keyring"
 # update
 lxc-attach -n $MACH -- \
     zsh -c \
-    "apt $APT_PROXY_OPTION update
-     apt $APT_PROXY_OPTION -y full-upgrade"
+    "apt-get $APT_PROXY_OPTION update
+     apt-get $APT_PROXY_OPTION -y dist-upgrade"
 
 # packages
 lxc-attach -n $MACH -- \
     zsh -c \
     "export DEBIAN_FRONTEND=noninteractive
-     apt $APT_PROXY_OPTION -y install xmlstarlet libxml2-utils"
+     apt-get $APT_PROXY_OPTION -y install xmlstarlet libxml2-utils"
 lxc-attach -n $MACH -- \
     zsh -c \
     "export DEBIAN_FRONTEND=noninteractive
-     apt $APT_PROXY_OPTION -y install ffmpeg
-     apt $APT_PROXY_OPTION -y install nginx libnginx-mod-rtmp
-     apt $APT_PROXY_OPTION -y install xz-utils
+     apt-get $APT_PROXY_OPTION -y install ffmpeg
+     apt-get $APT_PROXY_OPTION -y install nginx libnginx-mod-rtmp
+     apt-get $APT_PROXY_OPTION -y install xz-utils
 
      mkdir /tmp/source
      cd /tmp/source
-     apt $APT_PROXY_OPTION -dy source nginx
+     apt-get $APT_PROXY_OPTION -dy source nginx
      tar xf nginx_*.debian.tar.xz
 
      mkdir -p /usr/local/eb/livestream/stat/
@@ -143,8 +143,8 @@ lxc-attach -n $MACH -- \
 lxc-attach -n $MACH -- \
     zsh -c \
     "export DEBIAN_FRONTEND=noninteractive
-     apt $APT_PROXY_OPTION -y install uwsgi uwsgi-plugin-python3
-     apt $APT_PROXY_OPTION --install-recommends -y install python3-pip
+     apt-get $APT_PROXY_OPTION -y install uwsgi uwsgi-plugin-python3
+     apt-get $APT_PROXY_OPTION --install-recommends -y install python3-pip
      pip3 install --upgrade setuptools
      pip3 install mydaemon
      pip3 install flask"

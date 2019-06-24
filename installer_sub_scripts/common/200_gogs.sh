@@ -103,8 +103,8 @@ lxc-attach -n $MACH -- \
 # update
 lxc-attach -n $MACH -- \
     zsh -c \
-    "apt $APT_PROXY_OPTION update
-     apt $APT_PROXY_OPTION -y full-upgrade"
+    "apt-get $APT_PROXY_OPTION update
+     apt-get $APT_PROXY_OPTION -y dist-upgrade"
 
 # packages
 lxc-attach -n $MACH -- \
@@ -114,25 +114,25 @@ lxc-attach -n $MACH -- \
          'mysql-server mysql-server/root_password password'
      debconf-set-selections <<< \
          'mysql-server mysql-server/root_password_again password'
-     apt $APT_PROXY_OPTION -y install mariadb-server"
+     apt-get $APT_PROXY_OPTION -y install mariadb-server"
 
 lxc-attach -n $MACH -- \
     zsh -c \
     "export DEBIAN_FRONTEND=noninteractive
-     apt $APT_PROXY_OPTION -y install ssl-cert ca-certificates certbot
-     apt $APT_PROXY_OPTION -y install nginx-extras"
+     apt-get $APT_PROXY_OPTION -y install ssl-cert ca-certificates certbot
+     apt-get $APT_PROXY_OPTION -y install nginx-extras"
 
 lxc-attach -n $MACH -- \
     zsh -c \
     "export DEBIAN_FRONTEND=noninteractive
-     apt $APT_PROXY_OPTION -y install apt-transport-https gnupg2
+     apt-get $APT_PROXY_OPTION -y install apt-transport-https gnupg2
 
      wget -qO - https://dl.packager.io/srv/pkgr/gogs/key | apt-key add -
      wget -O /etc/apt/sources.list.d/gogs.list \
          https://dl.packager.io/srv/pkgr/gogs/pkgr/installer/debian/9.repo
 
-     apt $APT_PROXY_OPTION update
-     apt $APT_PROXY_OPTION --install-recommends -y install gogs"
+     apt-get $APT_PROXY_OPTION update
+     apt-get $APT_PROXY_OPTION --install-recommends -y install gogs"
 
 # -----------------------------------------------------------------------------
 # SYSTEM CONFIGURATION

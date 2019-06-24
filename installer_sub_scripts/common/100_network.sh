@@ -69,10 +69,10 @@ fi
 # PACKAGES
 # -----------------------------------------------------------------------------
 # removed packages
-apt -y remove iptables
+apt-get -y remove iptables
 
 # added packages
-apt $APT_PROXY_OPTION -y install nftables
+apt-get $APT_PROXY_OPTION -y install nftables
 
 # -----------------------------------------------------------------------------
 # NETWORK CONFIG

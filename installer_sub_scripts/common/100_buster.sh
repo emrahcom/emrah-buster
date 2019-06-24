@@ -101,18 +101,18 @@ sleep 3
 # PACKAGES
 # -----------------------------------------------------------------------------
 # update
-lxc-attach -n $MACH -- apt $APT_PROXY_OPTION update
-lxc-attach -n $MACH -- apt $APT_PROXY_OPTION -y full-upgrade
+lxc-attach -n $MACH -- apt-get $APT_PROXY_OPTION update
+lxc-attach -n $MACH -- apt-get $APT_PROXY_OPTION -y dist-upgrade
+lxc-attach -n $MACH -- apt-get $APT_PROXY_OPTION -y install apt-utils
 
 # packages
-lxc-attach -n $MACH -- apt $APT_PROXY_OPTION -y install zsh
+lxc-attach -n $MACH -- apt-get $APT_PROXY_OPTION -y install zsh
 lxc-attach -n $MACH -- \
     zsh -c \
-    "apt $APT_PROXY_OPTION -y install apt-utils
-     apt $APT_PROXY_OPTION -y install openssh-server openssh-client
-     apt $APT_PROXY_OPTION -y install cron logrotate
-     apt $APT_PROXY_OPTION -y install dbus libpam-systemd
-     apt $APT_PROXY_OPTION -y install wget ca-certificates"
+    "apt-get $APT_PROXY_OPTION -y install openssh-server openssh-client
+     apt-get $APT_PROXY_OPTION -y install cron logrotate
+     apt-get $APT_PROXY_OPTION -y install dbus libpam-systemd
+     apt-get $APT_PROXY_OPTION -y install wget ca-certificates"
 
 # -----------------------------------------------------------------------------
 # SYSTEM CONFIGURATION

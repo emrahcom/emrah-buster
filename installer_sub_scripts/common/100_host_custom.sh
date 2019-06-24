@@ -19,16 +19,17 @@ echo "---------------------- HOST CUSTOM ------------------------"
 # PACKAGES
 # -----------------------------------------------------------------------------
 # upgrade
-apt $APT_PROXY_OPTION -yd full-upgrade
-apt $APT_PROXY_OPTION -y upgrade
+apt-get $APT_PROXY_OPTION -yd dist-upgrade
+apt-get $APT_PROXY_OPTION -y upgrade
 
 # added packages
-apt $APT_PROXY_OPTION -y install cron
-apt $APT_PROXY_OPTION -y install zsh tmux vim
-apt $APT_PROXY_OPTION -y install htop iotop bmon bwm-ng
-apt $APT_PROXY_OPTION -y install iputils-ping fping wget curl whois dnsutils
-apt $APT_PROXY_OPTION -y install bzip2 rsync ack-grep jq
-apt $APT_PROXY_OPTION -y install net-tools rsyslog
+apt-get $APT_PROXY_OPTION -y install cron
+apt-get $APT_PROXY_OPTION -y install zsh tmux vim
+apt-get $APT_PROXY_OPTION -y install htop iotop bmon bwm-ng
+apt-get $APT_PROXY_OPTION -y install iputils-ping fping whois dnsutils
+apt-get $APT_PROXY_OPTION -y install wget curl rsync
+apt-get $APT_PROXY_OPTION -y install bzip2 rsync ack-grep jq
+apt-get $APT_PROXY_OPTION -y install net-tools rsyslog
 
 # -----------------------------------------------------------------------------
 # SYSTEM CONFIGURATION
@@ -42,7 +43,7 @@ cp ../../host/etc/cron.d/eb_update /etc/cron.d/
 # install openntpd if I'm not in LXC container
 if [ "$AM_I_IN_LXC" != true ]
 then
-    apt $APT_PROXY_OPTION -y install openntpd
+    apt-get $APT_PROXY_OPTION -y install openntpd
     cp ../../host/etc/default/openntpd /etc/default/
     systemctl restart openntpd.service
 fi

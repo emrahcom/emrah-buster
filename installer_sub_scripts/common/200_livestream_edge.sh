@@ -105,14 +105,14 @@ lxc-attach -n $MACH -- \
 # update
 lxc-attach -n $MACH -- \
     zsh -c \
-    "apt $APT_PROXY_OPTION update
-     apt $APT_PROXY_OPTION -y full-upgrade"
+    "apt-get $APT_PROXY_OPTION update
+     apt-get $APT_PROXY_OPTION -y dist-upgrade"
 
 # packages
 lxc-attach -n $MACH -- \
     zsh -c \
     "export DEBIAN_FRONTEND=noninteractive
-     apt install -y nginx-extras php-fpm"
+     apt-get install -y nginx-extras php-fpm"
 
 # -----------------------------------------------------------------------------
 # SYSTEM CONFIGURATION
