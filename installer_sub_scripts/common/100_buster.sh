@@ -124,6 +124,9 @@ lxc-attach -n $MACH -- \
      rm -f /etc/localtime
      ln -s /usr/share/zoneinfo/$TIMEZONE /etc/localtime"
 
+# ssh
+cp etc/ssh/sshd_config $ROOTFS/root/etc/ssh/
+
 # -----------------------------------------------------------------------------
 # ROOT USER
 # -----------------------------------------------------------------------------
