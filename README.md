@@ -222,4 +222,5 @@ Please, use one of the followings as a host:
 
 -  a Debian Buster container
 
--  a physical machine with a fresh installed [Debian Buster](https://www.debian.org/distrib/netinst)
+-  a physical machine with a fresh installed
+   [Debian Buster](https://www.debian.org/releases/buster/debian-installer/)
